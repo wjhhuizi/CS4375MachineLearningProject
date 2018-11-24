@@ -1,4 +1,6 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -40,6 +42,7 @@ public class Main {
                 break;
             }
 
+            // Start parsing attribute file...
             String[] temp = attr_line.split(": ");
             attrName = temp[0];
 
@@ -67,9 +70,41 @@ public class Main {
             sb.append(attrType);
             sb.append("\n");
         }
+        /* Hard Coded class NOT GOOD!!!*/
+        sb.append("@ATTRIBUTE class {0,1}\n");
+        sb.append("\n");
+        sc.close();
+        sc = null;
+        header = sb.toString();
+        sb = null;
 
-        System.out.println(sb.toString());
+        //////// Prepare ARFF File DATA ////////
+        sc = new Scanner(dataFile);
+        sb = new StringBuilder();
+        sb.append("@DATA\n");
 
+        while (sc.hasNextLine()) {
+
+            String temp = sc.nextLine();
+            temp = temp.replaceAll(" ", ",");
+
+            if (temp.charAt(temp.length()-1) == ',') {
+                temp = temp.substring(0, temp.length()-1);
+            }
+
+            sb.append(temp);
+            sb.append("\n");
+        }
+        sc.close();
+        sc = null;
+        data = sb.toString();
+        sb = null;
+
+        //System.out.println(header + data);
+        BufferedWriter bw = new BufferedWriter(new FileWriter("train.arff"));
+        bw.write(header);
+        bw.write(data);
+        bw.close();
     }
 
 
