@@ -19,7 +19,7 @@ public class Main {
         File   attributeFile     = new File(attributeFileName);
         File   dataFile          = new File(dataFileName);
         File   ARFF_File         = new File(ARFF_FileName);
-        
+
         generate_ARFF(attributeFile, dataFile, ARFF_File);
     }
 
