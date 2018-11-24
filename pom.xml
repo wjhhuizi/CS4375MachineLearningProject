@@ -22,27 +22,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.sanity</groupId>
-            <artifactId>quickml</artifactId>
-            <version>10.16</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.tensorflow</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.haifengl</groupId>
-            <artifactId>smile-core</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.haifengl</groupId>
-            <artifactId>smile-netlib</artifactId>
-            <version>1.5.2</version>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.0</version>
         </dependency>
     </dependencies>
 
