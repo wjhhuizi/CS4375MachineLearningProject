@@ -15,13 +15,15 @@ public class Main {
 
         String attributeFileName = "attr.txt";
         String dataFileName      = "train.mv.txt";
+        String ARFF_FileName     = "train.arff";
         File   attributeFile     = new File(attributeFileName);
         File   dataFile          = new File(dataFileName);
-
-        generate_ARFF(attributeFile, dataFile);
+        File   ARFF_File         = new File(ARFF_FileName);
+        
+        generate_ARFF(attributeFile, dataFile, ARFF_File);
     }
 
-    public static void generate_ARFF(File attributeFile, File dataFile) throws IOException{
+    public static void generate_ARFF(File attributeFile, File dataFile, File ARFF_File) throws IOException{
 
         String header   = "";
         String data     = "";
@@ -100,8 +102,7 @@ public class Main {
         data = sb.toString();
         sb = null;
 
-        //System.out.println(header + data);
-        BufferedWriter bw = new BufferedWriter(new FileWriter("train.arff"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(ARFF_File));
         bw.write(header);
         bw.write(data);
         bw.close();
