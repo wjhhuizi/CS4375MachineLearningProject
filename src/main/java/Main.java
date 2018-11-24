@@ -27,13 +27,13 @@ public class Main {
         String attrType = "";
         boolean containsMissingValue = false;
 
-        // Prepare ARFF File header
+        //////// Prepare ARFF File header ////////
         sc = new Scanner(attributeFile);
         StringBuilder sb = new StringBuilder();
         sb.append("@RELATION CS4375Project\n\n");
 
         while (sc.hasNextLine()) {
-            String   attr_line = sc.nextLine();
+            String attr_line = sc.nextLine();
 
             // Check if is the last line, true -> class line.
             if (!sc.hasNextLine()){
@@ -41,8 +41,6 @@ public class Main {
             }
 
             String[] temp = attr_line.split(": ");
-            //System.out.println(temp[0] + "--" + temp[1]);
-
             attrName = temp[0];
 
             if (temp[1].contains("?")){
@@ -58,14 +56,19 @@ public class Main {
                 temp[1] = temp[1].replace(")", "");
                 temp[1] = temp[1].replace("?", "");
                 temp[1] = temp[1].replace(".", "");
-                System.out.println(temp[1]);
 
                 String num[] = temp[1].split(",");
                 attrType = "{".concat(temp[1].substring(0,temp[1].length()-1)).concat("}");
-                System.out.println(attrType);
             }
 
+            sb.append("@ATTRIBUTE ");
+            sb.append(attrName);
+            sb.append(" ");
+            sb.append(attrType);
+            sb.append("\n");
         }
+
+        System.out.println(sb.toString());
 
     }
 
