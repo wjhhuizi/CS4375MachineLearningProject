@@ -1,13 +1,9 @@
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -16,24 +12,34 @@ public class Main {
     private static int num_of_attr = 0;
     private static RandomForest randomForest;
 
+    /**
+     * @param args Program arguments
+     *             args[0] attribute file
+     *             args[1] training file
+     *             args[2] testing file
+     *             args[3] prediction file
+     */
     public static void main(String[] args) throws Exception {
 
-        String attributeFileName    = "attr.txt";
-        String trainDataFileName    = "train.mv.txt";
+
+        String attributeFileName    = args.length >= 1 ? args[0] : "attr.txt"              ;
+        String trainDataFileName    = args.length >= 2 ? args[1] : "train.mv.txt"          ;
+        String testDataFileName     = args.length >= 3 ? args[2] : "prelim-mv-noclass.txt" ;
+        String predict_FileName     = args.length >= 4 ? args[3] : "Prediction.txt"        ;
         String train_ARFF_FileName  = "train.arff";
-        String testDataFileName     = "train.mv0.txt";
         String test_ARFF_Filename   = "test.arff";
 
         File   attributeFile        = new File(attributeFileName);
         File   trainDataFile        = new File(trainDataFileName);
-        File   train_ARFF_File      = new File(train_ARFF_FileName);
         File   testDataFile         = new File(testDataFileName);
+        File   train_ARFF_File      = new File(train_ARFF_FileName);
         File   test_ARFF_File       = new File(test_ARFF_Filename);
 
         generate_ARFF(attributeFile, trainDataFile, train_ARFF_File);
-        generate_ARFF(attributeFile, testDataFile,test_ARFF_File);
+        generate_ARFF(attributeFile, testDataFile, test_ARFF_File);
         train_RandomForest(train_ARFF_FileName);
-        eval_RandomForest(train_ARFF_FileName, test_ARFF_Filename);
+        classify(test_ARFF_Filename, predict_FileName);
+        //eval_RandomForest(train_ARFF_FileName, test_ARFF_Filename);
     }
 
     private static void generate_ARFF(File attributeFile, File dataFile, File ARFF_File) throws IOException{
@@ -162,12 +168,26 @@ public class Main {
 
     }
 
-    private static int classify(Instance inst) {
+    private static void classify(String unlabeled_ARFF_file, String prediction_file_name) throws Exception{
 
+        PrintWriter pw = new PrintWriter(prediction_file_name);
+        StringBuilder predict = new StringBuilder();
 
+        // Load unlabeled data
+        Instances unlabeled = new Instances(new BufferedReader(new FileReader(unlabeled_ARFF_file)));
 
+        // Set class attribute
+        unlabeled.setClassIndex(unlabeled.numAttributes() - 1);
 
-        return 0;
+        // Label Instances
+        for  (int i = 0; i < unlabeled.numInstances(); i++){
+            int label = (int)randomForest.classifyInstance(unlabeled.instance(i));
+            predict.append(label).append("\n");
+        }
+
+        predict = new StringBuilder(predict.substring(0, predict.length() - 1));
+        pw.print(predict);
+        pw.close();
     }
 
 
